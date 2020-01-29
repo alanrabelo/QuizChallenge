@@ -47,7 +47,8 @@ class GameManager {
         if possibleWords.contains(filteredWord) && !wordsFound.contains(filteredWord) {
             
             let lastIndexPath = IndexPath(row: wordsFound.count, section: 0)
-            wordsFound.append(filteredWord)
+            wordsFound.insert(filteredWord, at: 0)
+            self.delegate?.didUpdateCorrectPercentage(self.correctsText)
             delegate?.didInsertText(lastIndexPath)
             
             if Set(wordsFound).count == possibleWords.count {
@@ -72,7 +73,6 @@ class GameManager {
             } else {
                 self.remainingTime -= 1
                 self.delegate?.didUpdateRemainingTime(self.remainingTimeText)
-                self.delegate?.didUpdateCorrectPercentage(self.correctsText)
             }
             
         })
@@ -101,6 +101,8 @@ class GameManager {
         self.isRunning = false
         self.timer?.invalidate()
         self.timer = nil
+        self.remainingTime = 300
+        self.wordsFound = []
         delegate?.gameDidReset()
         delegate?.didUpdateRemainingTime(self.remainingTimeText)
         delegate?.didUpdateCorrectPercentage(self.correctsText)

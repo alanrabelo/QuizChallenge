@@ -16,6 +16,8 @@
 		E7111F5423E1F1D600FE187E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7111F5223E1F1D600FE187E /* LaunchScreen.storyboard */; };
 		E7111F5F23E1F1D600FE187E /* Quiz_ChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7111F5E23E1F1D600FE187E /* Quiz_ChallengeTests.swift */; };
 		E7111F6A23E1F1D600FE187E /* Quiz_ChallengeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7111F6923E1F1D600FE187E /* Quiz_ChallengeUITests.swift */; };
+		E75D9AF323E230F100A10812 /* LoadingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D9AF223E230F100A10812 /* LoadingManager.swift */; };
+		E75D9AF523E2311400A10812 /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E75D9AF423E2311400A10812 /* LoadingView.xib */; };
 		E7A0203123E1FA930038B3BF /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A0203023E1FA930038B3BF /* GameManager.swift */; };
 		E7BDD15123E2103D004B328D /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BDD15023E2103D004B328D /* AlertManager.swift */; };
 		E7BDD15323E21702004B328D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BDD15223E21702004B328D /* NetworkManager.swift */; };
@@ -55,6 +57,8 @@
 		E7111F6523E1F1D600FE187E /* Quiz ChallengeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Quiz ChallengeUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7111F6923E1F1D600FE187E /* Quiz_ChallengeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quiz_ChallengeUITests.swift; sourceTree = "<group>"; };
 		E7111F6B23E1F1D600FE187E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E75D9AF223E230F100A10812 /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
+		E75D9AF423E2311400A10812 /* LoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
 		E7A0203023E1FA930038B3BF /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		E7BDD15023E2103D004B328D /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		E7BDD15223E21702004B328D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -109,18 +113,15 @@
 		E7111F4323E1F1D300FE187E /* Quiz Challenge */ = {
 			isa = PBXGroup;
 			children = (
+				E75D9AF123E230CE00A10812 /* Controllers */,
+				E75D9AF023E230BB00A10812 /* Views */,
 				E7BDD15723E21775004B328D /* Network */,
 				E7BDD15423E2173B004B328D /* Models */,
 				E7111F4423E1F1D300FE187E /* AppDelegate.swift */,
 				E7111F4623E1F1D300FE187E /* SceneDelegate.swift */,
-				E7111F4823E1F1D300FE187E /* ViewController.swift */,
-				E7111F4A23E1F1D300FE187E /* Main.storyboard */,
 				E7111F5023E1F1D600FE187E /* Assets.xcassets */,
-				E7111F5223E1F1D600FE187E /* LaunchScreen.storyboard */,
 				E7111F5523E1F1D600FE187E /* Info.plist */,
 				E7111F4D23E1F1D300FE187E /* Quiz_Challenge.xcdatamodeld */,
-				E7A0203023E1FA930038B3BF /* GameManager.swift */,
-				E7BDD15023E2103D004B328D /* AlertManager.swift */,
 			);
 			path = "Quiz Challenge";
 			sourceTree = "<group>";
@@ -141,6 +142,27 @@
 				E7111F6B23E1F1D600FE187E /* Info.plist */,
 			);
 			path = "Quiz ChallengeUITests";
+			sourceTree = "<group>";
+		};
+		E75D9AF023E230BB00A10812 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E75D9AF423E2311400A10812 /* LoadingView.xib */,
+				E7111F4A23E1F1D300FE187E /* Main.storyboard */,
+				E7111F5223E1F1D600FE187E /* LaunchScreen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E75D9AF123E230CE00A10812 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E7BDD15023E2103D004B328D /* AlertManager.swift */,
+				E7A0203023E1FA930038B3BF /* GameManager.swift */,
+				E7111F4823E1F1D300FE187E /* ViewController.swift */,
+				E75D9AF223E230F100A10812 /* LoadingManager.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		E7BDD15423E2173B004B328D /* Models */ = {
@@ -264,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7111F5423E1F1D600FE187E /* LaunchScreen.storyboard in Resources */,
+				E75D9AF523E2311400A10812 /* LoadingView.xib in Resources */,
 				E7111F5123E1F1D600FE187E /* Assets.xcassets in Resources */,
 				E7111F4C23E1F1D300FE187E /* Main.storyboard in Resources */,
 			);
@@ -292,6 +315,7 @@
 			files = (
 				E7111F4923E1F1D300FE187E /* ViewController.swift in Sources */,
 				E7111F4523E1F1D300FE187E /* AppDelegate.swift in Sources */,
+				E75D9AF323E230F100A10812 /* LoadingManager.swift in Sources */,
 				E7BDD15123E2103D004B328D /* AlertManager.swift in Sources */,
 				E7BDD15323E21702004B328D /* NetworkManager.swift in Sources */,
 				E7BDD15623E21745004B328D /* QuizModel.swift in Sources */,

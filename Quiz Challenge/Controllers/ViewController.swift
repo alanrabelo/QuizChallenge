@@ -19,20 +19,40 @@ class ViewController: UIViewController {
     
     let gameManager = GameManager(withPossibleWords: ["for", "do", "while"], andRemainingTime: 300)
     let notificationCenter = NotificationCenter.default
-    
+    let loadingView = LoadingView.instanceFromNib()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         gameManager.delegate = self
-        gameManager.setupInitialLayout()
+//        gameManager.setupInitialLayout()
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
+    override func loadView() {
+        super.loadView()
+
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(loadingView)
+        NSLayoutConstraint.activate([
+            loadingView.heightAnchor.constraint(equalTo: self.view.heightAnchor),
+            loadingView.widthAnchor.constraint(equalTo: self.view.heightAnchor),
+            loadingView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            loadingView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+        ])
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
+        
         
         NetworkManager.getQuiz { (quiz) in
             if let quiz = quiz {
                 self.gameManager.quiz = quiz
+            }
+            DispatchQueue.main.async {
+                
+                self.loadingView.removeFromSuperview()
             }
         }
     }
@@ -94,6 +114,10 @@ extension ViewController: UITextFieldDelegate {
         return gameManager.isRunning
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return gameManager.isRunning
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         guard let text = textField.text else { return false }
@@ -118,11 +142,12 @@ extension ViewController : GameManagerDelegate {
     func gameDidReset() {
         
         self.tableView.reloadData()
+        self.textFieldWord.text = nil
     }
     
     func didInsertText(_ indexPath: IndexPath) {
         
-        self.tableView.insertRows(at: [indexPath], with: .left)
+        self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .left)
     }
     
     func didLostGame() {
