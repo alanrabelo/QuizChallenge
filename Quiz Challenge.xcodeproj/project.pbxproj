@@ -59,6 +59,7 @@
 		E7111F6B23E1F1D600FE187E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E75D9AF223E230F100A10812 /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
 		E75D9AF423E2311400A10812 /* LoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
+		E77DF91423E23D0800F78661 /* Quiz_Challenge 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Quiz_Challenge 2.xcdatamodel"; sourceTree = "<group>"; };
 		E7A0203023E1FA930038B3BF /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		E7BDD15023E2103D004B328D /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		E7BDD15223E21702004B328D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -655,6 +656,7 @@
 		E7111F4D23E1F1D300FE187E /* Quiz_Challenge.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E77DF91423E23D0800F78661 /* Quiz_Challenge 2.xcdatamodel */,
 				E7111F4E23E1F1D300FE187E /* Quiz_Challenge.xcdatamodel */,
 			);
 			currentVersion = E7111F4E23E1F1D300FE187E /* Quiz_Challenge.xcdatamodel */;
