@@ -9,22 +9,47 @@
 import Foundation
 class NetworkManager {
     
-    func getQuiz(_ completion: (_ quiz: Quiz?)->Void) {
+    static func getQuiz(_ completion: @escaping (_ quiz: Quiz?)->Void) {
         
-        guard let url = URL(string: "https://exampleapi.com/data.json") else {
+        guard let url = URL(string: "https://codechallenge.arctouch.com/quiz/1") else {
             
             completion(nil)
             return
         }
-            
-        let jsonString = ""
-        let jsonData = jsonString.data(using: .utf8)!
         
-        do {
-            let response = try JSONDecoder().decode(Quiz.self, from: jsonData)
-        } catch let error {
-            print(error.localizedDescription)
-            completion(nil)
+        URLSession.shared.dataTask(with: url) { (result) in
+           switch result {
+                case .success(let (response, data)):
+                    guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
+                        completion(nil)
+                        return
+                    }
+                    do {
+                        let quiz = try JSONDecoder().decode(Quiz.self, from: data)
+                        completion(quiz)
+                    } catch {
+                        completion(nil)
+                    }
+               case .failure(_):
+                    completion(nil)
+           }
+        }.resume()
+    }
+}
+
+extension URLSession {
+    func dataTask(with url: URL, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
+        return dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                result(.failure(error))
+                return
+            }
+            guard let response = response, let data = data else {
+                let error = NSError(domain: "error", code: 0, userInfo: nil)
+                result(.failure(error))
+                return
+            }
+            result(.success((response, data)))
         }
     }
 }

@@ -16,7 +16,12 @@ class GameManager {
     var isRunning = false
     var possibleWords = Set<String>()
     var wordsFound = [String]()
-    
+    var quiz : Quiz? {
+        didSet {
+            self.setupInitialLayout()
+        }
+    }
+
     var correctsText : String {
         
         return String(format: "%02d/%02d", wordsFound.count, possibleWords.count)
@@ -76,10 +81,19 @@ class GameManager {
     func setupInitialLayout() {
         
         self.remainingTime = 300
-        self.wordsFound = []
-        delegate?.gameDidReset()
-        delegate?.didUpdateRemainingTime(self.remainingTimeText)
-        delegate?.didUpdateCorrectPercentage(self.correctsText)
+        
+        if let possibleWords = self.quiz?.answer {
+            self.possibleWords = Set(possibleWords)
+        }
+        
+        DispatchQueue.main.async {
+
+            self.delegate?.didupdateQuestionTitle(self.quiz?.question)
+            self.wordsFound = []
+            self.delegate?.gameDidReset()
+            self.delegate?.didUpdateRemainingTime(self.remainingTimeText)
+            self.delegate?.didUpdateCorrectPercentage(self.correctsText)
+        }
     }
     
     func resetGame() {
@@ -98,10 +112,11 @@ class GameManager {
 }
 
 protocol GameManagerDelegate {
-    func didUpdateRemainingTime(_ text : String)
-    func didUpdateCorrectPercentage(_ text : String)
+    func didUpdateRemainingTime(_ text: String)
+    func didUpdateCorrectPercentage(_ text: String)
     func gameDidReset()
     func didInsertText(_ indexPath: IndexPath)
     func didWinGame()
     func didLostGame()
+    func didupdateQuestionTitle(_ title: String?)
 }

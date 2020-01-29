@@ -19,15 +19,22 @@ class ViewController: UIViewController {
     
     let gameManager = GameManager(withPossibleWords: ["for", "do", "while"], andRemainingTime: 300)
     let notificationCenter = NotificationCenter.default
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         gameManager.delegate = self
         gameManager.setupInitialLayout()
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-
-        // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        NetworkManager.getQuiz { (quiz) in
+            if let quiz = quiz {
+                self.gameManager.quiz = quiz
+            }
+        }
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
@@ -130,5 +137,9 @@ extension ViewController : GameManagerDelegate {
         }
         
         self.present(controller, animated: true, completion: nil)
+    }
+    
+    func didupdateQuestionTitle(_ title: String?) {
+            self.questionTitle.text = title
     }
 }
