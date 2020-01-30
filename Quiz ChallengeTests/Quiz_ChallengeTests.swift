@@ -9,7 +9,7 @@
 import XCTest
 @testable import Quiz_Challenge
 
-class Quiz_ChallengeTests: XCTestCase {
+class QuizChallengeTests: XCTestCase {
 
     let gameManager = GameManager(withPossibleWords: ["if", "else", "while"])
     

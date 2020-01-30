@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var labelRemainingTime: UILabel!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    let gameManager = GameManager(withPossibleWords: [])
+    let gameManager = GameManager(withPossibleWords: ["for", "if"])
     let notificationCenter = NotificationCenter.default
     let loadingView = LoadingView.instanceFromNib()
 
@@ -29,7 +29,6 @@ class ViewController: UIViewController {
     }
     
     override func loadView() {
-        
         super.loadView()
 
         loadingView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,22 +43,18 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
         NetworkManager.getQuiz { (quiz) in
-            
             if let quiz = quiz {
-                
                 self.gameManager.quiz = quiz
             }
+            
             DispatchQueue.main.async {
-                
                 self.loadingView.removeFromSuperview()
             }
         }
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
-        
         let keyboardFrame = UIResponder.keyboardFrameEndUserInfoKey
         guard let keyboardValue = notification.userInfo?[keyboardFrame] as? NSValue else { return }
 
@@ -74,7 +69,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func startResetAction(_ sender: UIButton) {
-        
         if gameManager.isRunning {
             
             gameManager.resetGame()
@@ -89,7 +83,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func didTapScreen(_ sender: Any) {
-        
         self.view.endEditing(true)
     }
 }
@@ -97,17 +90,14 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return self.gameManager.wordsFound.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = UITableViewCell()
         cell.textLabel?.text = self.gameManager.wordsFound[indexPath.row]
         return cell
@@ -135,7 +125,7 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
-extension ViewController : GameManagerDelegate {
+extension ViewController: GameManagerDelegate {
     
     func didUpdateCorrectPercentage(_ text: String) {
         
@@ -143,23 +133,19 @@ extension ViewController : GameManagerDelegate {
     }
     
     func didUpdateRemainingTime(_ text: String) {
-
         self.labelRemainingTime.text = text
     }
     
     func gameDidReset() {
-        
         self.tableView.reloadData()
         self.textFieldWord.text = nil
     }
     
     func didInsertText(_ indexPath: IndexPath) {
-        
         self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .left)
     }
     
     func didLostGame(withHitNumber hitNumber: Int, andNumberOfWords numberOfWords: Int) {
-        
         let controller = Alert.getLoseAlertController(withNumberOfHists: hitNumber, andNumberOfWords: numberOfWords) { (action) in
             
                 self.gameManager.startGame()
@@ -169,7 +155,6 @@ extension ViewController : GameManagerDelegate {
     }
     
     func didWinGame() {
-        
         let controller = Alert.getWinAlertController { (action) in
             
             self.gameManager.startGame()
@@ -178,7 +163,6 @@ extension ViewController : GameManagerDelegate {
     }
     
     func didupdateQuestionTitle(_ title: String?) {
-        
             self.labelQuestionTitle.text = title
     }
 }

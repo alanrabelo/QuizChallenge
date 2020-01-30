@@ -9,7 +9,6 @@
 import Foundation
 
 class Quiz : Codable {
-    
     var question: String?
-    var answers: [String]?
+    var answer: [String]?
 }
