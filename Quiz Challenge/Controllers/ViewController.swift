@@ -17,14 +17,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var labelRemainingTime: UILabel!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    let gameManager = GameManager(withPossibleWords: ["for", "do", "while"], andRemainingTime: 300)
+    let gameManager = GameManager(withPossibleWords: ["for", "do", "while"], andRemainingTime: 10)
     let notificationCenter = NotificationCenter.default
     let loadingView = LoadingView.instanceFromNib()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         gameManager.delegate = self
-//        gameManager.setupInitialLayout()
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
@@ -150,8 +149,14 @@ extension ViewController : GameManagerDelegate {
         self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .left)
     }
     
-    func didLostGame() {
+    func didLostGame(withHitNumber hitNumber: Int, andNumberOfWords numberOfWords: Int) {
         
+        let controller = Alert.getLoseAlertController(hitNumber, numberOfWords: numberOfWords) { (action) in
+            
+                self.gameManager.startGame()
+        }
+        
+        self.present(controller, animated: true, completion: nil)
     }
     
     func didWinGame() {
@@ -160,7 +165,6 @@ extension ViewController : GameManagerDelegate {
             
             self.gameManager.startGame()
         }
-        
         self.present(controller, animated: true, completion: nil)
     }
     
