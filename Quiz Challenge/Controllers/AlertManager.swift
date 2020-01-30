@@ -16,7 +16,7 @@ class Alert {
         return Alert.getSimpleAlertController(WithTitle: "Congratulations", andMessage: "Good job! You found all the answers on time. Keep up with the great work.", AndButtonTitle: "Play Again", completion)
     }
     
-    static func getLoseAlertController(_ numberOfHits: Int, numberOfWords: Int, _ completion : ((UIAlertAction) -> Void)?) -> UIAlertController {
+    static func getLoseAlertController(withNumberOfHists numberOfHits: Int, andNumberOfWords numberOfWords: Int, _ completion : ((UIAlertAction) -> Void)?) -> UIAlertController {
         
         return Alert.getSimpleAlertController(WithTitle: "Time Finished", andMessage: "Sorry, time is up! You got \(numberOfHits) of \(numberOfWords) answers.", AndButtonTitle: "Try Again", completion)
     }
@@ -26,6 +26,5 @@ class Alert {
         let action = UIAlertAction(title: buttonTitle, style: .default, handler: completion)
         controller.addAction(action)
         return controller
-        
     }
 }

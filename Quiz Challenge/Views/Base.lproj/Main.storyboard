@@ -122,8 +122,8 @@
                     <connections>
                         <outlet property="bottomConstraint" destination="Lv0-7B-Yp8" id="nSD-rY-sVf"/>
                         <outlet property="labelCorrectNumber" destination="Zt5-O4-mjm" id="Jc5-pu-rGt"/>
+                        <outlet property="labelQuestionTitle" destination="NlB-We-pjY" id="JNV-jW-xfR"/>
                         <outlet property="labelRemainingTime" destination="UEg-pc-Ngh" id="eBI-Fo-HQX"/>
-                        <outlet property="questionTitle" destination="NlB-We-pjY" id="JNV-jW-xfR"/>
                         <outlet property="tableView" destination="INp-cb-QUt" id="d7g-G9-PS0"/>
                         <outlet property="textFieldWord" destination="y8w-hn-P1x" id="hS6-EN-XId"/>
                     </connections>

@@ -10,14 +10,14 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var questionTitle: UILabel!
+    @IBOutlet weak var labelQuestionTitle: UILabel!
     @IBOutlet weak var textFieldWord: UITextField!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var labelCorrectNumber: UILabel!
     @IBOutlet weak var labelRemainingTime: UILabel!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    let gameManager = GameManager(withPossibleWords: ["for", "do", "while"], andRemainingTime: 10)
+    let gameManager = GameManager(withPossibleWords: [])
     let notificationCenter = NotificationCenter.default
     let loadingView = LoadingView.instanceFromNib()
 
@@ -29,6 +29,7 @@ class ViewController: UIViewController {
     }
     
     override func loadView() {
+        
         super.loadView()
 
         loadingView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,9 +45,10 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
-        
         NetworkManager.getQuiz { (quiz) in
+            
             if let quiz = quiz {
+                
                 self.gameManager.quiz = quiz
             }
             DispatchQueue.main.async {
@@ -57,7 +59,9 @@ class ViewController: UIViewController {
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
-        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        let keyboardFrame = UIResponder.keyboardFrameEndUserInfoKey
+        guard let keyboardValue = notification.userInfo?[keyboardFrame] as? NSValue else { return }
 
         let keyboardScreenEndFrame = keyboardValue.cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
@@ -65,7 +69,7 @@ class ViewController: UIViewController {
         if notification.name == UIResponder.keyboardWillHideNotification {
             bottomConstraint.constant = 16
         } else {
-            bottomConstraint.constant = keyboardViewEndFrame.height
+            bottomConstraint.constant = keyboardViewEndFrame.height + 16
         }
     }
     
@@ -75,6 +79,7 @@ class ViewController: UIViewController {
             
             gameManager.resetGame()
             sender.setTitle("Start", for: .normal)
+            
         } else {
             
             gameManager.startGame()
@@ -92,14 +97,17 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return self.gameManager.wordsFound.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = UITableViewCell()
         cell.textLabel?.text = self.gameManager.wordsFound[indexPath.row]
         return cell
@@ -114,6 +122,7 @@ extension ViewController: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
         return gameManager.isRunning
     }
     
@@ -151,7 +160,7 @@ extension ViewController : GameManagerDelegate {
     
     func didLostGame(withHitNumber hitNumber: Int, andNumberOfWords numberOfWords: Int) {
         
-        let controller = Alert.getLoseAlertController(hitNumber, numberOfWords: numberOfWords) { (action) in
+        let controller = Alert.getLoseAlertController(withNumberOfHists: hitNumber, andNumberOfWords: numberOfWords) { (action) in
             
                 self.gameManager.startGame()
         }
@@ -169,6 +178,7 @@ extension ViewController : GameManagerDelegate {
     }
     
     func didupdateQuestionTitle(_ title: String?) {
-            self.questionTitle.text = title
+        
+            self.labelQuestionTitle.text = title
     }
 }

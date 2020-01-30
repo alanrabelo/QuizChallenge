@@ -90,7 +90,7 @@ class GameManager {
         
         self.remainingTime = self.totalTime
         
-        if let possibleWords = self.quiz?.answer {
+        if let possibleWords = self.quiz?.answers {
             
             self.possibleWords = Set(possibleWords)
         }
