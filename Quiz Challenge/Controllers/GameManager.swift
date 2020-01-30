@@ -42,6 +42,12 @@ class GameManager {
         self.remainingTime = totalTime
     }
     
+    init(withPossibleWords possibleWords : [String]) {
+        self.possibleWords = Set(possibleWords)
+        self.totalTime = 300
+        self.remainingTime = 300
+    }
+    
     func add(_ word: String) {
         
         let filteredWord = word.lowercased().replacingOccurrences(of: " ", with: "")
@@ -54,6 +60,7 @@ class GameManager {
             
             if Set(wordsFound).count == possibleWords.count {
                 self.timer?.invalidate()
+                self.isRunning = false
                 delegate?.didWinGame()
             }
         }

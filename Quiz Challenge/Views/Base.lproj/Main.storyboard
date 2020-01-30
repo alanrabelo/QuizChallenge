@@ -71,7 +71,7 @@
                                             <constraint firstAttribute="height" constant="40" id="4QY-SA-gcw"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                         <connections>
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="3Dn-pA-paP"/>
                                         </connections>
