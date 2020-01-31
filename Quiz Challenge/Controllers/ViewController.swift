@@ -36,25 +36,12 @@ class GameViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        loadQuiz()
-    }
-    
-    func loadQuiz() {
-        
-        NetworkManager.getQuiz { (result, message) in
-            switch result {
-            case .success(let quiz):
-                self.gameManager.quiz = quiz
-            case .failure(_):
-                self.showErrorAlert(message ?? "Error loading quiz")
-            }
-            self.hideLoadingView()
-        }
+        gameManager.loadQuiz()
     }
     
     func showErrorAlert(_ message: String) {
         let alertController = Alert.getErrorAlertController(message) { (action) in
-            self.loadQuiz()
+            self.gameManager.loadQuiz()
         }
         DispatchQueue.main.async {
             self.present(alertController, animated: true, completion: nil)
@@ -198,5 +185,13 @@ extension GameViewController: GameManagerDelegate {
     
     func didHitWord() {
         self.textFieldWord.text = nil
+    }
+    
+    func shouldPresentError(_ message: String) {
+        self.showErrorAlert(message)
+    }
+    
+    func gameDidLoad() {
+        self.hideLoadingView()
     }
 }

@@ -99,13 +99,25 @@ class GameManager {
         self.timer = nil
         self.remainingTime = self.totalTime
         self.wordsFound = []
-        delegate?.gameDidReset()
-        delegate?.didUpdateRemainingTime(self.remainingTimeText)
-        delegate?.didUpdateCorrectPercentage(self.correctsText)
+        self.delegate?.gameDidReset()
+        self.delegate?.didUpdateRemainingTime(self.remainingTimeText)
+        self.delegate?.didUpdateCorrectPercentage(self.correctsText)
     }
     
     func stopGame() {
         self.resetGame()
+    }
+    
+    func loadQuiz() {
+        NetworkManager.getQuiz { (result, message) in
+            switch result {
+            case .success(let quiz):
+                self.quiz = quiz
+                self.delegate?.gameDidLoad()
+            case .failure(_):
+                self.delegate?.shouldPresentError(message ?? "Error Loading Quiz")
+            }
+        }
     }
 }
 
@@ -118,4 +130,6 @@ protocol GameManagerDelegate: class {
     func didLostGame(withHitNumber hitNumber: Int, andNumberOfWords numberOfWords: Int)
     func didupdateQuestionTitle(_ title: String?)
     func didHitWord()
+    func shouldPresentError(_ message: String)
+    func gameDidLoad()
 }
