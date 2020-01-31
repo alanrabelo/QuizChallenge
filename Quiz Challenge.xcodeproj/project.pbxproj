@@ -111,6 +111,7 @@
 		E7111F4323E1F1D300FE187E /* Quiz Challenge */ = {
 			isa = PBXGroup;
 			children = (
+				E7ED24FA23E4557100C2A23D /* Managers */,
 				E75D9AF123E230CE00A10812 /* Controllers */,
 				E75D9AF023E230BB00A10812 /* Views */,
 				E7BDD15723E21775004B328D /* Network */,
@@ -154,10 +155,7 @@
 		E75D9AF123E230CE00A10812 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E7BDD15023E2103D004B328D /* AlertManager.swift */,
-				E7A0203023E1FA930038B3BF /* GameManager.swift */,
 				E7111F4823E1F1D300FE187E /* ViewController.swift */,
-				E75D9AF223E230F100A10812 /* LoadingManager.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -176,6 +174,16 @@
 				E7BDD15223E21702004B328D /* NetworkManager.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		E7ED24FA23E4557100C2A23D /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				E7BDD15023E2103D004B328D /* AlertManager.swift */,
+				E7A0203023E1FA930038B3BF /* GameManager.swift */,
+				E75D9AF223E230F100A10812 /* LoadingManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

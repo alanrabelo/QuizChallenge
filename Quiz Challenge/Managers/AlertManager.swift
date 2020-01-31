@@ -18,6 +18,10 @@ class Alert {
         return Alert.getSimpleAlertController(WithTitle: "Time Finished", andMessage: "Sorry, time is up! You got \(numberOfHits) of \(numberOfWords) answers.", AndButtonTitle: "Try Again", completion)
     }
     
+    static func getErrorAlertController(_ message: String, _ completion : ((UIAlertAction) -> Void)?) -> UIAlertController {
+        return Alert.getSimpleAlertController(WithTitle: "Couldn't load Quiz", andMessage: message, AndButtonTitle: "Try Again", completion)
+    }
+    
     static func getSimpleAlertController(WithTitle title: String, andMessage message: String, AndButtonTitle buttonTitle: String, _ completion : ((UIAlertAction) -> Void)?) -> UIAlertController {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: buttonTitle, style: .default, handler: completion)

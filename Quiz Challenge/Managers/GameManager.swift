@@ -53,6 +53,7 @@ class GameManager {
             wordsFound.insert(filteredWord, at: 0)
             self.delegate?.didUpdateCorrectPercentage(self.correctsText)
             delegate?.didInsertText(lastIndexPath)
+            delegate?.didHitWord()
             
             if Set(wordsFound).count == possibleWords.count {
                 self.timer?.invalidate()
@@ -118,4 +119,5 @@ protocol GameManagerDelegate: class {
     func didWinGame()
     func didLostGame(withHitNumber hitNumber: Int, andNumberOfWords numberOfWords: Int)
     func didupdateQuestionTitle(_ title: String?)
+    func didHitWord()
 }

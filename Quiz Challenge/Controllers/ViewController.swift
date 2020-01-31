@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  GameViewController.swift
 //  Quiz Challenge
 //
 //  Created by Alan Martins on 29/01/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class GameViewController: UIViewController {
 
     @IBOutlet weak var labelQuestionTitle: UILabel!
     @IBOutlet weak var textFieldWord: UITextField!
@@ -32,15 +32,7 @@ class ViewController: UIViewController {
         super.loadView()
 
         self.makeTransparent()
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.view.addSubview(loadingView)
-        NSLayoutConstraint.activate([
-            loadingView.heightAnchor.constraint(equalTo: self.view.heightAnchor),
-            loadingView.widthAnchor.constraint(equalTo: self.view.heightAnchor),
-            loadingView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            loadingView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-        ])
+        self.showLoadingView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,23 +40,42 @@ class ViewController: UIViewController {
     }
     
     func loadQuiz() {
-        NetworkManager.getQuiz { (quiz) in
-            if let quiz = quiz {
+        
+        NetworkManager.getQuiz { (result, message) in
+            switch result {
+            case .success(let quiz):
                 self.gameManager.quiz = quiz
-            } else {
-                let alertController = Alert.getSimpleAlertController(WithTitle: "Couldn't load Quiz",
-                                               andMessage: "An error ocurred while loading quiz",
-                                               AndButtonTitle: "Try Again") { (action) in
-                    self.loadQuiz()
-                }
-                DispatchQueue.main.async {
-                    self.present(alertController, animated: true, completion: nil)
-                }
+            case .failure(_):
+                self.showErrorAlert(message ?? "Error loading quiz")
             }
-            
-            DispatchQueue.main.async {
-                self.loadingView.removeFromSuperview()
-            }
+            self.hideLoadingView()
+        }
+    }
+    
+    func showErrorAlert(_ message: String) {
+        let alertController = Alert.getErrorAlertController(message) { (action) in
+            self.loadQuiz()
+        }
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    func showLoadingView() {
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(loadingView)
+        NSLayoutConstraint.activate([
+            loadingView.heightAnchor.constraint(equalTo: self.view.heightAnchor),
+            loadingView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
+            loadingView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            loadingView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+        ])
+    }
+    
+    func hideLoadingView() {
+        DispatchQueue.main.async {
+            self.loadingView.removeFromSuperview()
         }
     }
     
@@ -104,9 +115,15 @@ class ViewController: UIViewController {
     @IBAction func didTapScreen(_ sender: Any) {
         self.view.endEditing(true)
     }
+    
+    @IBAction func didChangeText(_ sender: UITextField) {
+        if let text = sender.text {
+            self.gameManager.add(text)
+        }
+    }
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension GameViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -122,7 +139,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension GameViewController: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return gameManager.isRunning
     }
@@ -130,16 +147,9 @@ extension ViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return gameManager.isRunning
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let text = textField.text else { return false }
-        gameManager.add(text)
-        textField.text = nil
-        return true
-    }
 }
 
-extension ViewController: GameManagerDelegate {
+extension GameViewController: GameManagerDelegate {
 
     func didUpdateCorrectPercentage(_ text: String) {
         self.labelCorrectNumber.text = text
@@ -184,5 +194,9 @@ extension ViewController: GameManagerDelegate {
     
     func didupdateQuestionTitle(_ title: String?) {
         self.labelQuestionTitle.text = title
+    }
+    
+    func didHitWord() {
+        self.textFieldWord.text = nil
     }
 }
