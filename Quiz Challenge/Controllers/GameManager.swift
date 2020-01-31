@@ -9,7 +9,6 @@
 import Foundation
 
 class GameManager {
-    
     weak var delegate: GameManagerDelegate?
     let totalTime: TimeInterval
     var remainingTime: TimeInterval
@@ -17,6 +16,7 @@ class GameManager {
     var isRunning = false
     var possibleWords = Set<String>()
     var wordsFound = [String]()
+    
     var quiz: Quiz? {
         didSet {
             self.setupInitialLayout()
@@ -24,19 +24,16 @@ class GameManager {
     }
 
     var correctsText: String {
-        
         return String(format: "%02d/%02d", wordsFound.count, possibleWords.count)
     }
     
     var remainingTimeText: String {
-        
         let minutes = Int(remainingTime / 60)
         let seconds = Int(remainingTime.truncatingRemainder(dividingBy: 60))
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
     init(withPossibleWords possibleWords: [String], andRemainingTime totalTime: TimeInterval) {
-        
         self.possibleWords = Set(possibleWords)
         self.totalTime = totalTime
         self.remainingTime = totalTime
@@ -45,11 +42,10 @@ class GameManager {
     init(withPossibleWords possibleWords: [String]) {
         self.possibleWords = Set(possibleWords)
         self.totalTime = 300
-        self.remainingTime = 300
+        self.remainingTime = self.totalTime
     }
     
     func add(_ word: String) {
-        
         let filteredWord = word.lowercased().replacingOccurrences(of: " ", with: "")
         if possibleWords.contains(filteredWord) && !wordsFound.contains(filteredWord) {
             
@@ -67,15 +63,12 @@ class GameManager {
     }
     
     func startGame() {
-        
         self.isRunning = true
         self.timer?.invalidate()
         self.setupInitialLayout()
         
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (timer) in
-            
             if self.remainingTime <= 0 {
-                
                 timer.invalidate()
                 self.delegate?.didLostGame(withHitNumber: self.wordsFound.count, andNumberOfWords: self.possibleWords.count)
                 self.remainingTime = self.totalTime
@@ -87,16 +80,12 @@ class GameManager {
     }
     
     func setupInitialLayout() {
-        
         self.remainingTime = self.totalTime
-        
         if let possibleWords = self.quiz?.answer {
-            
             self.possibleWords = Set(possibleWords)
         }
         
         DispatchQueue.main.async {
-
             self.delegate?.didupdateQuestionTitle(self.quiz?.question)
             self.wordsFound = []
             self.delegate?.gameDidReset()
@@ -106,7 +95,6 @@ class GameManager {
     }
     
     func resetGame() {
-        
         self.isRunning = false
         self.timer?.invalidate()
         self.timer = nil
@@ -118,13 +106,11 @@ class GameManager {
     }
     
     func stopGame() {
-        
         self.resetGame()
     }
 }
 
 protocol GameManagerDelegate: class {
-    
     func didUpdateRemainingTime(_ text: String)
     func didUpdateCorrectPercentage(_ text: String)
     func gameDidReset()

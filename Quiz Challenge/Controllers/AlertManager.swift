@@ -10,14 +10,11 @@ import Foundation
 import UIKit
 
 class Alert {
-    
     static func getWinAlertController(_ completion : ((UIAlertAction) -> Void)?) -> UIAlertController {
-        
         return Alert.getSimpleAlertController(WithTitle: "Congratulations", andMessage: "Good job! You found all the answers on time. Keep up with the great work.", AndButtonTitle: "Play Again", completion)
     }
     
     static func getLoseAlertController(withNumberOfHists numberOfHits: Int, andNumberOfWords numberOfWords: Int, _ completion : ((UIAlertAction) -> Void)?) -> UIAlertController {
-        
         return Alert.getSimpleAlertController(WithTitle: "Time Finished", andMessage: "Sorry, time is up! You got \(numberOfHits) of \(numberOfWords) answers.", AndButtonTitle: "Try Again", completion)
     }
     

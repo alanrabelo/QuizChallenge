@@ -7,8 +7,9 @@
 //
 
 import XCTest
+import Quiz_Challenge
 
-class Quiz_ChallengeUITests: XCTestCase {
+class QuizChallengeUITests: XCTestCase {
     
     let app = XCUIApplication()
 
@@ -16,6 +17,7 @@ class Quiz_ChallengeUITests: XCTestCase {
         
         super.setUp()
         continueAfterFailure = false
+        app.launchArguments = ["UITests"]
         app.launch()
     }
 
@@ -24,60 +26,31 @@ class Quiz_ChallengeUITests: XCTestCase {
     }
 
     func testInsertCorrectWord() {
-        
-        let wordTable = app.tables["Empty list"]
-
+    
         app.buttons["Start"].tap()
-        
-        let fKey = app/*@START_MENU_TOKEN@*/.keys["f"]/*[[".keyboards.keys[\"f\"]",".keys[\"f\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        fKey.tap()
-        
-        let oKey = app/*@START_MENU_TOKEN@*/.keys["o"]/*[[".keyboards.keys[\"o\"]",".keys[\"o\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        oKey.tap()
-        
-        let rKey = app/*@START_MENU_TOKEN@*/.keys["r"]/*[[".keyboards.keys[\"r\"]",".keys[\"r\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        rKey.tap()
-        
-        let doneButton = app/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".keyboards",".buttons[\"concluído\"]",".buttons[\"Done\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
-        doneButton.tap()
-        
+        typeText("for")
+        app/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".keyboards",".buttons[\"concluído\"]",".buttons[\"Done\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
         XCTAssertEqual(app.tables.staticTexts.count, 1)
-
         app.terminate()
     }
     
     func testInsertWrongWord() {
         
-        let wordTable = app.tables["Empty list"]
         app.buttons["Start"].tap()
-        app.textFields["Insert Word"].tap()
-        
-        let fKey = app.keys["d"]
-        fKey.tap()
-        fKey.tap()
-        
-        let oKey = app/*@START_MENU_TOKEN@*/.keys["o"]/*[[".keyboards.keys[\"o\"]",".keys[\"o\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        oKey.tap()
-        oKey.tap()
-        
-        let rKey = app/*@START_MENU_TOKEN@*/.keys["r"]/*[[".keyboards.keys[\"r\"]",".keys[\"r\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        rKey.tap()
-        rKey.tap()
-        app/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".keyboards",".buttons[\"concluído\"]",".buttons[\"Done\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
-        
-        XCTAssertEqual(wordTable.cells.count, 0)
-        
+        typeText("fol")
+        app.buttons["Done"].tap()
+        XCTAssertEqual(app.tables.staticTexts.count, 0)
         app.terminate()
     }
-
-//    func testLaunchPerformance() {
-//        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-//            // This measures how long it takes to launch your application.
-//            measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
-//                XCUIApplication().launch()
-//            }
-//        }
-//    }
+    
+    func typeText(_ text: String) {
+        app.textFields["Insert Word"].tap()
+        
+        for char in text {
+            let key = app.keys[String(char)]
+            key.tap()
+        }
+    }
 }
 
 

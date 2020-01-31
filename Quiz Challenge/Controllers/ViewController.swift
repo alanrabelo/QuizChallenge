@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var labelRemainingTime: UILabel!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    let gameManager = GameManager(withPossibleWords: ["for", "if"])
+    var gameManager = GameManager(withPossibleWords: [])
     let notificationCenter = NotificationCenter.default
     let loadingView = LoadingView.instanceFromNib()
 
@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     override func loadView() {
         super.loadView()
 
+        self.makeTransparent()
         loadingView.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(loadingView)
@@ -43,9 +44,22 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        loadQuiz()
+    }
+    
+    func loadQuiz() {
         NetworkManager.getQuiz { (quiz) in
             if let quiz = quiz {
                 self.gameManager.quiz = quiz
+            } else {
+                let alertController = Alert.getSimpleAlertController(WithTitle: "Couldn't load Quiz",
+                                               andMessage: "An error ocurred while loading quiz",
+                                               AndButtonTitle: "Try Again") { (action) in
+                    self.loadQuiz()
+                }
+                DispatchQueue.main.async {
+                    self.present(alertController, animated: true, completion: nil)
+                }
             }
             
             DispatchQueue.main.async {
@@ -70,16 +84,21 @@ class ViewController: UIViewController {
     
     @IBAction func startResetAction(_ sender: UIButton) {
         if gameManager.isRunning {
-            
             gameManager.resetGame()
             sender.setTitle("Start", for: .normal)
-            
         } else {
-            
             gameManager.startGame()
             self.textFieldWord.becomeFirstResponder()
             sender.setTitle("Reset", for: .normal)
         }
+    }
+    
+    func makeTransparent() {
+        self.tableView.alpha = 0
+        self.textFieldWord.alpha = 0
+        self.labelQuestionTitle.alpha = 0
+        self.labelCorrectNumber.alpha = 0
+        self.labelRemainingTime.alpha = 0
     }
     
     @IBAction func didTapScreen(_ sender: Any) {
@@ -88,7 +107,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -105,19 +123,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ViewController: UITextFieldDelegate {
-    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
         return gameManager.isRunning
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         return gameManager.isRunning
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
         guard let text = textField.text else { return false }
         gameManager.add(text)
         textField.text = nil
@@ -126,9 +140,8 @@ extension ViewController: UITextFieldDelegate {
 }
 
 extension ViewController: GameManagerDelegate {
-    
+
     func didUpdateCorrectPercentage(_ text: String) {
-        
         self.labelCorrectNumber.text = text
     }
     
@@ -137,6 +150,15 @@ extension ViewController: GameManagerDelegate {
     }
     
     func gameDidReset() {
+        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: {
+            self.tableView.alpha = 1
+            self.textFieldWord.alpha = 1
+            self.labelQuestionTitle.alpha = 1
+            self.labelCorrectNumber.alpha = 1
+            self.labelRemainingTime.alpha = 1
+            
+        }, completion: nil)
+        
         self.tableView.reloadData()
         self.textFieldWord.text = nil
     }
@@ -147,7 +169,6 @@ extension ViewController: GameManagerDelegate {
     
     func didLostGame(withHitNumber hitNumber: Int, andNumberOfWords numberOfWords: Int) {
         let controller = Alert.getLoseAlertController(withNumberOfHists: hitNumber, andNumberOfWords: numberOfWords) { (action) in
-            
                 self.gameManager.startGame()
         }
         
@@ -156,13 +177,12 @@ extension ViewController: GameManagerDelegate {
     
     func didWinGame() {
         let controller = Alert.getWinAlertController { (action) in
-            
             self.gameManager.startGame()
         }
         self.present(controller, animated: true, completion: nil)
     }
     
     func didupdateQuestionTitle(_ title: String?) {
-            self.labelQuestionTitle.text = title
+        self.labelQuestionTitle.text = title
     }
 }

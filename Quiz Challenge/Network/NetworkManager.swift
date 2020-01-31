@@ -7,12 +7,11 @@
 //
 
 import Foundation
+
 class NetworkManager {
     
     static func getQuiz(_ completion: @escaping (_ quiz: Quiz?)->Void) {
-        
         guard let url = URL(string: "https://codechallenge.arctouch.com/quiz/1") else {
-            
             completion(nil)
             return
         }
@@ -30,7 +29,8 @@ class NetworkManager {
                     } catch {
                         completion(nil)
                     }
-               case .failure(_):
+               case .failure(let error):
+                    print(error.localizedDescription)
                     completion(nil)
            }
         }.resume()
