@@ -46,19 +46,17 @@ class GameManager {
     }
     
     func add(_ word: String) {
-        let filteredWord = word.lowercased().replacingOccurrences(of: " ", with: "")
-        if possibleWords.contains(filteredWord) && !wordsFound.contains(filteredWord) {
-            
+        if possibleWords.contains(word) && !wordsFound.contains(word) {
             let lastIndexPath = IndexPath(row: wordsFound.count, section: 0)
-            wordsFound.insert(filteredWord, at: 0)
+            wordsFound.insert(word, at: 0)
             self.delegate?.didUpdateCorrectPercentage(self.correctsText)
-            delegate?.didInsertText(lastIndexPath)
-            delegate?.didHitWord()
+            self.delegate?.didInsertText(lastIndexPath)
+            self.delegate?.didHitWord()
             
             if Set(wordsFound).count == possibleWords.count {
                 self.timer?.invalidate()
                 self.isRunning = false
-                delegate?.didWinGame()
+                self.delegate?.didWinGame()
             }
         }
     }
